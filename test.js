@@ -13,10 +13,14 @@ ELSE
     a = 4
 END
 
-b = 3
-s = 2
-PRINT "Average: "
-PRINT (b + s) / a`
+// test
+b = "a" + "b"
+c = 2^3-4*5%(6-1)
+d = NOT (a != b OR TRUE AND a > 2)
+PRINT a
+PRINT b
+PRINT c
+PRINT d`
     let lexer = new Lexer(source)
     let generator = new Generator()
     let parser = new Parser(lexer, generator)

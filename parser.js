@@ -2,9 +2,10 @@
     "use strict"
     const {TokenType} = require("./token.js")
 
-    function Parser(lexer, generator) {
+    function Parser(lexer, generator, debug) {
         this.lexer = lexer
         this.generator = generator
+        this.debug = debug === undefined ? false : true
         
         this.curToken = null
         this.peekToken = null
@@ -53,13 +54,13 @@
 
     Parser.prototype.statement = function() {
         if (this.checkToken(TokenType.NEWLINE)) {
-            console.log("newline")
+            if (this.debug) console.log("newline")
             this.nextToken()
             return
         }
 
         if (this.checkToken(TokenType.PRINT)) {
-            console.log("print")
+            if (this.debug) console.log("print")
             this.nextToken()
 
             if (this.checkToken(TokenType.STRING)) {
@@ -71,7 +72,7 @@
                 this.generator.addLine(")")
             }
         } else if (this.checkToken(TokenType.IF)) {
-            console.log("if")
+            if (this.debug) console.log("if")
             this.nextToken()
             this.generator.add("if(")
             this.expression()
@@ -88,7 +89,7 @@
             this.match(TokenType.END)
             this.generator.addLine("}")
         } else if (this.checkToken(TokenType.IDENT)) {
-            console.log("assign")
+            if (this.debug) console.log("assign")
             if (!this.variables.has(this.curToken.text)) {
                 this.variables.add(this.curToken.text)
                 this.generator.add("var ")
@@ -106,7 +107,7 @@
     }
 
     Parser.prototype.else = function() {
-        console.log("else")
+        if (this.debug) console.log("else")
         this.nextToken()
         this.generator.add("}else")
         if (this.checkToken(TokenType.IF)) {
@@ -196,8 +197,11 @@
 
     // check unary
     Parser.prototype.expression6 = function() {
-        if (this.checkToken(TokenType.PLUS) || this.checkToken(TokenType.MINUS) || this.checkToken(TokenType.NOT)) {
+        if (this.checkToken(TokenType.PLUS) || this.checkToken(TokenType.MINUS)) {
             this.generator.add(this.curToken.text)
+            this.nextToken()
+        } else if (this.checkToken(TokenType.NOT)) {
+            this.generator.add("!")
             this.nextToken()
         }
         this.primary()
@@ -210,9 +214,17 @@
             this.expression()
             this.match(TokenType.RB)
             this.generator.add(")")
-        } else if (this.checkToken(TokenType.NUMBER) || this.checkToken(TokenType.STRING) ||
-                   this.checkToken(TokenType.TRUE) || this.checkToken(TokenType.FALSE)) {
+        } else if (this.checkToken(TokenType.NUMBER)) {
             this.generator.add(this.curToken.text)
+            this.nextToken()
+        } else if (this.checkToken(TokenType.STRING)) {
+            this.generator.add('"' + this.curToken.text + '"')
+            this.nextToken()
+        } else if (this.checkToken(TokenType.TRUE)) {
+            this.generator.add("true")
+            this.nextToken()
+        } else if (this.checkToken(TokenType.FALSE)) {
+            this.generator.add("false")
             this.nextToken()
         } else if (this.checkToken(TokenType.IDENT)) {
             if (!this.variables.has(this.curToken.text)) {
