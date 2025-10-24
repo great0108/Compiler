@@ -7,6 +7,8 @@
         NUMBER : "NUMBER",
         IDENT  : "IDENT",
         STRING : "STRING",
+        TRUE : "TRUE",
+        FALSE : "FALSE",
         
         // keywords
         PRINT : "PRINT",
@@ -20,6 +22,7 @@
         MINUS : "MINUS",
         ASTERISK : "ASTERISK",
         SLASH : "SLASH",
+        PERSENT : "PERSENT",
         CARET : "CARET",
         LB : "LB",
         RB : "RB",
@@ -40,7 +43,7 @@
     }
 
     Token.checkKeyword = function(tokenText) {
-        const keywords = ["PRINT", "IF", "ELSE", "END"]
+        const keywords = ["PRINT", "IF", "ELSE", "END", "AND", "OR", "NOT", "TRUE", "FALSE"]
         if (keywords.includes(tokenText)) {
             return tokenText
         }

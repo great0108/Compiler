@@ -4,9 +4,13 @@
     const Parser = require("./parser.js")
     const Generator = require("./generator.js")
 
-    let source = `a = 0
+    let source = `a = 3
 IF a < 1 
     a = 1+1
+ELSE IF a < 2
+    a = 3
+ELSE
+    a = 4
 END
 
 b = 3

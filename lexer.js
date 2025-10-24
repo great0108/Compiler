@@ -37,16 +37,14 @@
             token = new Token(this.curChar, TokenType.ASTERISK)
         } else if (this.curChar == "/") {
             token = new Token(this.curChar, TokenType.SLASH)
+        } else if (this.curChar == "%") {
+            token = new Token(this.curChar, TokenType.PERSENT)
         } else if (this.curChar == "^") {
             token = new Token(this.curChar, TokenType.CARET)
         } else if (this.curChar == "(") {
             token = new Token(this.curChar, TokenType.LB)
         } else if (this.curChar == ")") {
             token = new Token(this.curChar, TokenType.RB)
-        } else if (this.curChar == "and") {
-            token = new Token(this.curChar, TokenType.AND)
-        } else if (this.curChar == "or") {
-            token = new Token(this.curChar, TokenType.OR)
         } else if (this.curChar == "\n") {
             token = new Token(this.curChar, TokenType.NEWLINE)
         } else if (this.curChar == "\0") {
@@ -81,7 +79,7 @@
                 this.nextChar()
                 token = new Token(lastChar + this.curChar, TokenType.NOTEQ)
             } else {
-                token = new Token(this.curChar, TokenType.NOT)
+                this.error("Expected !=, got !" + self.peek())
             }
         } else if (this.curChar == "\"") {
             this.nextChar()

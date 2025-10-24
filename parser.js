@@ -78,8 +78,12 @@
             this.newline()
             this.generator.addLine("){")
 
-            while (!this.checkToken(TokenType.END)) {
+            while (!this.checkToken(TokenType.END) && !this.checkToken(TokenType.ELSE)) {
                 this.statement()
+            }
+
+            if (this.checkToken(TokenType.ELSE)) {
+                this.else()
             }
             this.match(TokenType.END)
             this.generator.addLine("}")
@@ -99,6 +103,35 @@
             this.error("Invalid statement at " + this.curToken.text + " (" + this.curToken.type + ")")
         }
         this.newline()
+    }
+
+    Parser.prototype.else = function() {
+        console.log("else")
+        this.nextToken()
+        this.generator.add("}else")
+        if (this.checkToken(TokenType.IF)) {
+            this.nextToken()
+            this.generator.add(" if(")
+            this.expression()
+            this.newline()
+            this.generator.addLine("){")
+
+            while (!this.checkToken(TokenType.END) && !this.checkToken(TokenType.ELSE)) {
+                this.statement()
+            }
+            if (this.checkToken(TokenType.ELSE)) {
+                this.else()
+            }
+        } else if (this.checkToken(TokenType.NEWLINE)) {
+            this.nextToken()
+            this.generator.addLine("{")
+
+            while (!this.checkToken(TokenType.END)) {
+                this.statement()
+            }
+        } else {
+            this.error("Unexpected token at " + this.curToken.text)
+        }
     }
 
     // check or
@@ -144,7 +177,7 @@
     // check *, /
     Parser.prototype.expression4 = function() {
         this.expression5()
-        while (this.checkToken(TokenType.ASTERISK) || this.checkToken(TokenType.SLASH)) {
+        while (this.checkToken(TokenType.ASTERISK) || this.checkToken(TokenType.SLASH) || this.checkToken(TokenType.PERSENT)) {
             this.generator.add(this.curToken.text)
             this.nextToken()
             this.expression5()
@@ -177,7 +210,8 @@
             this.expression()
             this.match(TokenType.RB)
             this.generator.add(")")
-        } else if (this.checkToken(TokenType.NUMBER) || this.checkToken(TokenType.STRING)) {
+        } else if (this.checkToken(TokenType.NUMBER) || this.checkToken(TokenType.STRING) ||
+                   this.checkToken(TokenType.TRUE) || this.checkToken(TokenType.FALSE)) {
             this.generator.add(this.curToken.text)
             this.nextToken()
         } else if (this.checkToken(TokenType.IDENT)) {
