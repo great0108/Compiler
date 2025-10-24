@@ -43,6 +43,10 @@
             token = new Token(this.curChar, TokenType.LB)
         } else if (this.curChar == ")") {
             token = new Token(this.curChar, TokenType.RB)
+        } else if (this.curChar == "and") {
+            token = new Token(this.curChar, TokenType.AND)
+        } else if (this.curChar == "or") {
+            token = new Token(this.curChar, TokenType.OR)
         } else if (this.curChar == "\n") {
             token = new Token(this.curChar, TokenType.NEWLINE)
         } else if (this.curChar == "\0") {

@@ -2,8 +2,10 @@
     "use strict"
     const {TokenType} = require("./token.js")
 
-    function Parser(lexer) {
+    function Parser(lexer, generator) {
         this.lexer = lexer
+        this.generator = generator
+        
         this.curToken = null
         this.peekToken = null
         this.variables = new Set()
@@ -43,14 +45,13 @@
     }
 
     Parser.prototype.program = function() {
-        console.log("program")
         while (!this.checkToken(TokenType.EOF)) {
             this.statement()
         }
+        return this.generator.header + this.generator.code
     }
 
     Parser.prototype.statement = function() {
-        console.log("token : " + this.curToken.type)
         if (this.checkToken(TokenType.NEWLINE)) {
             console.log("newline")
             this.nextToken()
@@ -62,28 +63,37 @@
             this.nextToken()
 
             if (this.checkToken(TokenType.STRING)) {
+                this.generator.addLine("console.log(\"" + this.curToken.text + "\")")
                 this.nextToken()
             } else {
+                this.generator.add("console.log(")
                 this.expression()
+                this.generator.addLine(")")
             }
         } else if (this.checkToken(TokenType.IF)) {
             console.log("if")
             this.nextToken()
+            this.generator.add("if(")
             this.expression()
             this.newline()
+            this.generator.addLine("){")
 
             while (!this.checkToken(TokenType.END)) {
                 this.statement()
             }
             this.match(TokenType.END)
+            this.generator.addLine("}")
         } else if (this.checkToken(TokenType.IDENT)) {
             console.log("assign")
             if (!this.variables.has(this.curToken.text)) {
                 this.variables.add(this.curToken.text)
+                this.generator.add("var ")
             }
+            this.generator.add(this.curToken.text + " = ")
             this.nextToken()
             this.match(TokenType.EQ)
             this.expression()
+            this.generator.addLine()
         }
         else {
             this.error("Invalid statement at " + this.curToken.text + " (" + this.curToken.type + ")")
@@ -93,9 +103,9 @@
 
     // check or
     Parser.prototype.expression = function() {
-        console.log("expression")
         this.expression1()
         while (this.checkToken(TokenType.OR)) {
+            this.generator.add("||")
             this.nextToken()
             this.expression1()
         }
@@ -103,9 +113,9 @@
 
     // check and
     Parser.prototype.expression1 = function() {
-        console.log("expression1")
         this.expression2()
         while (this.checkToken(TokenType.AND)) {
+            this.generator.add("&&")
             this.nextToken()
             this.expression2()
         }
@@ -113,9 +123,9 @@
 
     // check comparison
     Parser.prototype.expression2 = function() {
-        console.log("expression2")
         this.expression3()
         while (this.checkComparison()) {
+            this.generator.add(this.curToken.text)
             this.nextToken()
             this.expression3()
         }
@@ -123,9 +133,9 @@
 
     // check +, -
     Parser.prototype.expression3 = function() {
-        console.log("expression3")
         this.expression4()
         while (this.checkToken(TokenType.PLUS) || this.checkToken(TokenType.MINUS)) {
+            this.generator.add(this.curToken.text)
             this.nextToken()
             this.expression4()
         }
@@ -133,9 +143,9 @@
 
     // check *, /
     Parser.prototype.expression4 = function() {
-        console.log("expression4")
         this.expression5()
         while (this.checkToken(TokenType.ASTERISK) || this.checkToken(TokenType.SLASH)) {
+            this.generator.add(this.curToken.text)
             this.nextToken()
             this.expression5()
         }
@@ -143,9 +153,9 @@
 
     // check ^
     Parser.prototype.expression5 = function() {
-        console.log("expression5")
         this.expression6()
         while (this.checkToken(TokenType.CARET)) {
+            this.generator.add("**")
             this.nextToken()
             this.expression6()
         }
@@ -153,25 +163,28 @@
 
     // check unary
     Parser.prototype.expression6 = function() {
-        console.log("expression6")
         if (this.checkToken(TokenType.PLUS) || this.checkToken(TokenType.MINUS) || this.checkToken(TokenType.NOT)) {
+            this.generator.add(this.curToken.text)
             this.nextToken()
         }
         this.primary()
     }
 
     Parser.prototype.primary = function() {
-        console.log("primary (" + this.curToken.text + ")")
         if (this.checkToken(TokenType.LB)) {
+            this.generator.add("(")
             this.nextToken()
             this.expression()
             this.match(TokenType.RB)
+            this.generator.add(")")
         } else if (this.checkToken(TokenType.NUMBER) || this.checkToken(TokenType.STRING)) {
+            this.generator.add(this.curToken.text)
             this.nextToken()
         } else if (this.checkToken(TokenType.IDENT)) {
             if (!this.variables.has(this.curToken.text)) {
                 this.error("Referencing variable before assignment: " + this.curToken.text)
             }
+            this.generator.add(this.curToken.text)
             this.nextToken()
         } else {
             this.error("Unexpected token at " + this.curToken.text)
