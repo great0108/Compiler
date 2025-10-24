@@ -54,5 +54,4 @@
         TokenType: TokenType,
         Token: Token
     }
-
 })()

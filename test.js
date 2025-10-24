@@ -1,6 +1,6 @@
 (function() {
     "use strict"
-    const Lexer = require("./Lexer.js")
+    const Lexer = require("./lexer.js")
     const Parser = require("./parser.js")
     const Generator = require("./generator.js")
 
