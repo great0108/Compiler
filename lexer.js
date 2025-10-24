@@ -37,6 +37,12 @@
             token = new Token(this.curChar, TokenType.ASTERISK)
         } else if (this.curChar == "/") {
             token = new Token(this.curChar, TokenType.SLASH)
+        } else if (this.curChar == "^") {
+            token = new Token(this.curChar, TokenType.CARET)
+        } else if (this.curChar == "(") {
+            token = new Token(this.curChar, TokenType.LB)
+        } else if (this.curChar == ")") {
+            token = new Token(this.curChar, TokenType.RB)
         } else if (this.curChar == "\n") {
             token = new Token(this.curChar, TokenType.NEWLINE)
         } else if (this.curChar == "\0") {
@@ -161,5 +167,4 @@
     }
 
     module.exports = Lexer
-
 })()

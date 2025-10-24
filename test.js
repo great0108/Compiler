@@ -1,14 +1,17 @@
 (function() {
     "use strict"
     const Lexer = require("./Lexer.js")
-    const {TokenType} = require("./token.js")
+    const Parser = require("./parser.js")
 
-    let source = "IF+-123 foo*ELSE/"
+    let source = `foo = bar * 3 + 2
+IF foo > 0
+    IF (10 * 10) < 100
+        PRINT bar
+    END
+END`
+console.log(source.split("\n"))
     let lexer = new Lexer(source)
+    let parser = new Parser(lexer)
 
-    let token = lexer.getToken()
-    while (token.type != TokenType.EOF) {
-        console.log(token.type, token.text)
-        token = lexer.getToken()
-    }
+    parser.program()
 })()
