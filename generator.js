@@ -33,9 +33,9 @@
     }
 
     Generator.prototype.api2Header = function() {
-        this.header += "message = msg.content\n" +
-                       "room = msg.room\n" + 
-                       "sender = msg.author.name\n"
+        this.header += "var message = msg.content\n" +
+                       "var room = msg.room\n" + 
+                       "var sender = msg.author.name\n"
     }
 
     module.exports = Generator
