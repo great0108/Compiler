@@ -9,6 +9,7 @@
         STRING : "STRING",
         TRUE : "TRUE",
         FALSE : "FALSE",
+        DOT : "DOT",
         
         // keywords
         PRINT : "PRINT",

@@ -64,10 +64,12 @@
             this.nextToken()
 
             if (this.checkToken(TokenType.STRING)) {
-                this.generator.addLine("console.log(\"" + this.curToken.text + "\")")
+                this.generator.addPrint()
+                this.generator.addLine("(\"" + this.curToken.text + "\")")
                 this.nextToken()
             } else {
-                this.generator.add("console.log(")
+                this.generator.addPrint()
+                this.generator.add("(")
                 this.expression()
                 this.generator.addLine(")")
             }
@@ -204,7 +206,26 @@
             this.generator.add("!")
             this.nextToken()
         }
-        this.primary()
+        this.expression7()
+    }
+
+    // check .
+    Parser.prototype.expression7 = function() {
+        if (this.checkToken(TokenType.NUMBER) || this.checkToken(TokenType.TRUE) || this.checkToken(TokenType.FALSE)) {
+            this.primary()
+        } else {
+            this.primary()
+            while (this.checkToken(TokenType.DOT)) {
+                this.generator.add(".")
+                this.nextToken()
+                if (this.checkToken(TokenType.IDENT)) {
+                    this.generator.add(this.curToken.text)
+                    this.nextToken()
+                } else {
+                    this.error("Unexpected token at " + this.curToken.text)
+                }
+            }
+        }
     }
 
     Parser.prototype.primary = function() {

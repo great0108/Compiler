@@ -6,6 +6,7 @@
         this.source = source + "\n"
         this.curChar = ""
         this.curPos = -1
+        this.afterDot = false
         this.nextChar()
     }
 
@@ -81,7 +82,15 @@
             } else {
                 this.error("Expected !=, got !" + self.peek())
             }
-        } else if (this.curChar == "\"") {
+        } else if (this.curChar == ".") {
+            if (this.isEngOrKor(this.peek())) {
+                token = new Token(this.curChar, TokenType.DOT)
+                this.afterDot = true
+            } else {
+                this.error("Illegal character after dot.")
+            }
+        }
+        else if (this.curChar == "\"") {
             this.nextChar()
             let startPos = this.curPos
 
@@ -120,10 +129,11 @@
 
             let tokenText = this.source.slice(startPos, this.curPos + 1)
             let type = Token.checkKeyword(tokenText)
-            if (type != null) {
-                token = new Token(tokenText, type)
-            } else {
+            if (type == null || this.afterDot) {
                 token = new Token(tokenText, TokenType.IDENT)
+                this.afterDot = false
+            } else {
+                token = new Token(tokenText, type)
             }
         }
         
@@ -159,12 +169,12 @@
     }
 
     Lexer.prototype.isEngOrKor = function(char) {
-        const regex = /[a-zA-Z]|[가-힣]/;
+        const regex = /[a-zA-Z]|[가-힣]|_/;
         return regex.test(char)
     }
 
     Lexer.prototype.isEngKorOrDigit = function(char) {
-        const regex = /[a-zA-Z]|[가-힣]|[0-9]/;
+        const regex = /[a-zA-Z]|[가-힣]|_|[0-9]/;
         return regex.test(char)
     }
 
