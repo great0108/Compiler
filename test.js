@@ -18,10 +18,13 @@ END
 b = "a" + "b"
 c = 2^3-4*5%(6-1)
 d = NOT (a != b OR TRUE AND a > 2)
-PRINT a.a
+PRINT a
 PRINT b.length
 PRINT c
-PRINT d`
+PRINT d
+PRINT isNaN(a) OR FALSE
+console.log(a)
+`
 
     let source2 = "a = 1\nab.abc"
     let lexer = new Lexer(source)

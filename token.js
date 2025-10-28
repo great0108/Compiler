@@ -10,6 +10,7 @@
         TRUE : "TRUE",
         FALSE : "FALSE",
         DOT : "DOT",
+        COMMA : "COMMA",
         
         // keywords
         PRINT : "PRINT",

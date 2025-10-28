@@ -9,7 +9,9 @@
         
         this.curToken = null
         this.peekToken = null
-        this.variables = new Set()
+
+        let preVariables = ["isNaN", "console"]
+        this.variables = new Set(preVariables)
 
         this.nextToken()
         this.nextToken()
@@ -91,16 +93,22 @@
             this.match(TokenType.END)
             this.generator.addLine("}")
         } else if (this.checkToken(TokenType.IDENT)) {
-            if (this.debug) console.log("assign")
-            if (!this.variables.has(this.curToken.text)) {
-                this.variables.add(this.curToken.text)
-                this.generator.add("var ")
+            if (this.checkPeek(TokenType.LB) || this.checkPeek(TokenType.DOT)) {
+                this.expression()
+            } else if (this.checkPeek(TokenType.EQ)) {
+                if (this.debug) console.log("assign")
+                if (!this.variables.has(this.curToken.text)) {
+                    this.variables.add(this.curToken.text)
+                    this.generator.add("var ")
+                }
+                this.generator.add(this.curToken.text + " = ")
+                this.nextToken()
+                this.match(TokenType.EQ)
+                this.expression()
+                this.generator.addLine()
+            } else {
+                this.error("Invalid statement at " + this.curToken.text + " (" + this.curToken.type + ")")
             }
-            this.generator.add(this.curToken.text + " = ")
-            this.nextToken()
-            this.match(TokenType.EQ)
-            this.expression()
-            this.generator.addLine()
         }
         else {
             this.error("Invalid statement at " + this.curToken.text + " (" + this.curToken.type + ")")
@@ -137,6 +145,26 @@
         }
     }
 
+    Parser.prototype.functionCall = function() {
+        if (this.debug) console.log("function call")
+        this.generator.add(this.curToken.text + "(")
+        this.nextToken()
+        this.match(TokenType.LB)
+        if (this.checkToken(TokenType.RB)) {
+            this.nextToken()
+            this.generator.add(")")
+        } else {
+            this.expression()
+            while (!this.checkToken(TokenType.RB)) {
+                this.match(TokenType.COMMA)
+                this.generator.add(",")
+                this.expression()
+            }
+            this.nextToken()
+            this.generator.add(")")
+        }
+    }
+
     // check or
     Parser.prototype.expression = function() {
         this.expression1()
@@ -160,8 +188,12 @@
     // check comparison
     Parser.prototype.expression2 = function() {
         this.expression3()
-        while (this.checkComparison()) {
-            this.generator.add(this.curToken.text)
+        while (this.checkComparison() || this.checkToken(TokenType.EQ)) {
+            if (this.checkToken(TokenType.EQ)) {
+                this.generator.add("==")
+            } else {
+                this.generator.add(this.curToken.text)
+            }
             this.nextToken()
             this.expression3()
         }
@@ -219,8 +251,12 @@
                 this.generator.add(".")
                 this.nextToken()
                 if (this.checkToken(TokenType.IDENT)) {
-                    this.generator.add(this.curToken.text)
-                    this.nextToken()
+                    if (this.checkPeek(TokenType.LB)) {
+                        this.functionCall()
+                    } else {
+                        this.generator.add(this.curToken.text)
+                        this.nextToken()
+                    }
                 } else {
                     this.error("Unexpected token at " + this.curToken.text)
                 }
@@ -251,8 +287,12 @@
             if (!this.variables.has(this.curToken.text)) {
                 this.error("Referencing variable before assignment: " + this.curToken.text)
             }
-            this.generator.add(this.curToken.text)
-            this.nextToken()
+            if (this.checkPeek(TokenType.LB)) {
+                this.functionCall()
+            } else {
+                this.generator.add(this.curToken.text)
+                this.nextToken()
+            }
         } else {
             this.error("Unexpected token at " + this.curToken.text)
         }

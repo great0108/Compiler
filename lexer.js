@@ -46,6 +46,8 @@
             token = new Token(this.curChar, TokenType.LB)
         } else if (this.curChar == ")") {
             token = new Token(this.curChar, TokenType.RB)
+        } else if (this.curChar == ",") {
+            token = new Token(this.curChar, TokenType.COMMA)
         } else if (this.curChar == "\n") {
             token = new Token(this.curChar, TokenType.NEWLINE)
         } else if (this.curChar == "\0") {
