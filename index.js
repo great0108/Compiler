@@ -4,6 +4,10 @@
     const Parser = require("./parser.js")
     const Generator = require("./generator.js")
 
+    function compile(source, env, language) {
+        
+    }
+
     module.exports = {
         Lexer : Lexer,
         Parser : Parser,

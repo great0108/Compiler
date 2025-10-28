@@ -2,7 +2,7 @@
     "use strict"
 
     function Generator(env) {
-        this.env = env === undefined ? "node" : "api2"
+        this.env = env === undefined ? "node" : env
         this.header = ""
         this.code = ""
 

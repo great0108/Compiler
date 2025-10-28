@@ -3,10 +3,11 @@
     const {TokenType, Keywords} = require("./token.js")
     const {checkTypo} = require("./textSimilarity.js")
 
-    function Parser(lexer, generator, debug) {
+    function Parser(lexer, generator, language, debug) {
         this.lexer = lexer
         this.generator = generator
-        this.debug = debug === undefined ? false : true
+        this.debug = debug === undefined ? false : debug
+        this.language = language === undefined ? "eng" : language
         
         this.curToken = null
         this.peekToken = null
