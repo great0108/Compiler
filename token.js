@@ -39,14 +39,15 @@
         NOT : "NOT"
     }
 
+    const Keywords = ["PRINT", "IF", "ELSE", "END", "AND", "OR", "NOT", "TRUE", "FALSE"]
+
     function Token(tokenText, tokenType) {
         this.text = tokenText
         this.type = tokenType
     }
 
     Token.checkKeyword = function(tokenText) {
-        const keywords = ["PRINT", "IF", "ELSE", "END", "AND", "OR", "NOT", "TRUE", "FALSE"]
-        if (keywords.includes(tokenText)) {
+        if (Keywords.includes(tokenText)) {
             return tokenText
         }
         return null
@@ -58,6 +59,7 @@
 
     module.exports = {
         TokenType: TokenType,
-        Token: Token
+        Token: Token,
+        Keywords : Keywords
     }
 })()

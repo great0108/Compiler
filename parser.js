@@ -1,6 +1,7 @@
 (function() {
     "use strict"
-    const {TokenType} = require("./token.js")
+    const {TokenType, Keywords} = require("./token.js")
+    const {checkTypo} = require("./textSimilarity.js")
 
     function Parser(lexer, generator, debug) {
         this.lexer = lexer
@@ -45,7 +46,14 @@
         this.peekToken = this.lexer.getToken()
     }
 
-    Parser.prototype.error = function(message) {
+    Parser.prototype.error = function(message, tokenText) {
+        if(tokenText !== undefined) {
+            let keywords = Keywords.concat(Array.from(this.variables))
+            let result = checkTypo(tokenText, keywords)
+            if(result) {
+                throw new Error(this.line + "번째 줄에서 에러, " + message + "\n" + result + "를 사용하고 싶으셨나요?")
+            }
+        }
         // throw new Error("Parser error: " + message)
         throw new Error(this.line + "번째 줄에서 에러, " + message)
     }
@@ -111,12 +119,12 @@
                 this.expression()
                 this.generator.addLine()
             } else {
-                // this.error("Invalid statement at " + this.curToken.text + " (" + this.curToken.type + ")")
-                this.error("잘못된 코드 : " + this.curToken.text)
+                // this.error("Invalid statement at " + this.curToken.text)
+                this.error("잘못된 코드 : " + this.curToken.text, this.curToken.text)
             }
         }
         else {
-            // this.error("Invalid statement at " + this.curToken.text + " (" + this.curToken.type + ")")
+            // this.error("Invalid statement at " + this.curToken.text)
             this.error("잘못된 코드 : " + this.curToken.text)
         }
         this.newline()
@@ -306,7 +314,7 @@
         } else if (this.checkToken(TokenType.IDENT)) {
             if (!this.variables.has(this.curToken.text)) {
                 // this.error("Referencing variable before assignment: " + this.curToken.text)
-                this.error("선언하지 않은 변수를 사용함 : " + this.curToken.text)
+                this.error("선언하지 않은 변수를 사용함 : " + this.curToken.text, this.curToken.text)
             }
             if (this.checkPeek(TokenType.LB)) {
                 this.functionCall()

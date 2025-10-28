@@ -37,28 +37,39 @@
 
     function editDistance(s1, s2){
         if(s1 === s2) return 0
+        // s1이 항상 더 길거나 같게 유지
         if(s2.length > s1.length) return editDistance(s2, s1)
         if(s2.length === 0) return s1.length
+        
         const len1 = s1.length, len2 = s2.length
-        const d = Array(len2 + 1).fill(0).map(() => Array(len1 + 1).fill(0))
-        for (let i = 0; i <= len2; i++) d[i][0] = i
-        for (let j = 0; j <= len1; j++) d[0][j] = j
-        for(let i = 1; i <= len1; i++){
+        
+        // d[i][j]는 s1의 처음 i글자와 s2의 처음 j글자 사이의 거리를 저장
+        // d는 (len1 + 1) x (len2 + 1) 크기로 초기화 (s1의 길이 x s2의 길이)
+        const d = Array(len1 + 1).fill(0).map(() => Array(len2 + 1).fill(0))
+        
+        for (let i = 0; i <= len1; i++) d[i][0] = i // s2가 비었을 때
+        for (let j = 0; j <= len2; j++) d[0][j] = j // s1이 비었을 때
+        
+        for(let i = 1; i <= len1; i++)
             for(let j = 1; j <= len2; j++){
+                const cost = (s1[i-1] === s2[j-1]) ? 0 : 1
+                
                 d[i][j] = Math.min(
-                    d[i][j-1]+1,
-                    d[i-1][j]+1,
-                    d[i-1][j-1]+(s2[i-1] !== s1[j-1])
+                    d[i-1][j] + 1,      // 삭제 (s1[i-1] 제거)
+                    d[i][j-1] + 1,      // 삽입 (s2[j-1] 삽입)
+                    d[i-1][j-1] + cost  // 대체 (s1[i-1]을 s2[j-1]로 대체)
                 )
-                if (i > 1 && j > 1 && s2[i-1] === s1[j-2] && s2[i-2] === s1[j-1]) {
+
+                // 전치(Transposition) 변환: Damerau-Levenshtein
+                // s1의 마지막 두 글자와 s2의 마지막 두 글자가 전치 관계일 때
+                if (i > 1 && j > 1 && s1[i-1] === s2[j-2] && s1[i-2] === s2[j-1]) {
                     d[i][j] = Math.min(
                         d[i][j], 
-                        d[i-2][j-2] + 1
+                        d[i-2][j-2] + 1 // 전치 비용
                     )
                 }
             }
-        }
-        return d[len2][len1]
+        return d[len1][len2]
     }
 
     /**
@@ -68,22 +79,27 @@
      * @description 편집 거리 알고리즘(레벤슈타인)을 이용, 두 문자열 간 유사도를 측정하여 반환
      */
     function getSimilarity(s1, s2){
-        return 1 - editDistance(s1, s2)/Math.max(s1.length, s2.length)
+        if(s1 === s2) return 1
+        if(s2.length > s1.length) return getSimilarity(s2, s1)
+        if(s2.length === 0) return 0
+        return 1 - editDistance(s1, s2)/s1.length
     }
 
     function checkTypo(str, keywords) {
+        str = norm(str)
         if(str.length < 3) return null
-        for(let keyword in keywords) {
-            if(editDistance(str, keyword) == 1) {
+        for(let keyword of keywords) {
+            if(editDistance(str, norm(keyword)) == 1) {
                 return keyword
             }
         }
         return null
     }
 
-return {
-    norm: norm,
-    editDistance,
-    getSimilarity: getSimilarity
-}
+    module.exports = {
+        norm: norm,
+        editDistance : editDistance,
+        getSimilarity: getSimilarity,
+        checkTypo : checkTypo
+    }
 })()
