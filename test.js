@@ -17,7 +17,7 @@ END
 // test
 b = "a" +
     "b"
-c = 2^3-4*5%(6-1)
+c = 2^3-4*5%((6-1))
 d = NOT (a != b OR TRUE AND a > 2)
 PRINT a
 PRINT b.length

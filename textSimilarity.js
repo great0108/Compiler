@@ -38,14 +38,17 @@
     function editDistance(s1, s2){
         if(s1 === s2) return 0
         if(s2.length > s1.length) return editDistance(s2, s1)
-        if(s2.length === 0) return 0
-        const d = Array(s2.length+1).fill().map((_, i) => i? [i]: Array(s1.length+1).fill().map((_, j) => j))
-        for(let i = 1; i <= s2.length; i++)
-            for(let j = 1; j <= s1.length; j++){
+        if(s2.length === 0) return s1.length
+        const len1 = s1.length, len2 = s2.length
+        const d = Array(len2 + 1).fill(0).map(() => Array(len1 + 1).fill(0))
+        for (let i = 0; i <= len2; i++) d[i][0] = i
+        for (let j = 0; j <= len1; j++) d[0][j] = j
+        for(let i = 1; i <= len1; i++){
+            for(let j = 1; j <= len2; j++){
                 d[i][j] = Math.min(
                     d[i][j-1]+1,
                     d[i-1][j]+1,
-                    d[i-1][j-1]+(s2[i-1] != [s1[j-1]])
+                    d[i-1][j-1]+(s2[i-1] !== s1[j-1])
                 )
                 if (i > 1 && j > 1 && s2[i-1] === s1[j-2] && s2[i-2] === s1[j-1]) {
                     d[i][j] = Math.min(
@@ -54,7 +57,8 @@
                     )
                 }
             }
-        return d[s2.length][s1.length]
+        }
+        return d[len2][len1]
     }
 
     /**

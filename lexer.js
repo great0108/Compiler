@@ -6,7 +6,7 @@
         this.source = source + "\n"
         this.curChar = ""
         this.curPos = -1
-        this.line = 1  // get from parser
+        this.line = 1
         this.afterDot = false
         this.nextChar()
     }
@@ -51,6 +51,7 @@
             token = new Token(this.curChar, TokenType.COMMA)
         } else if (this.curChar == "\n") {
             token = new Token(this.curChar, TokenType.NEWLINE)
+            this.line += 1
         } else if (this.curChar == "\0") {
             token = new Token("", TokenType.EOF)
         } else if (this.curChar == "=") {
@@ -83,14 +84,16 @@
                 this.nextChar()
                 token = new Token(lastChar + this.curChar, TokenType.NOTEQ)
             } else {
-                this.error("Expected !=, got !" + self.peek())
+                // this.error("Expected !=, got !" + this.peek())
+                this.error("!= 대신 다른 이상한 문자 : !" + this.peek())
             }
         } else if (this.curChar == ".") {
             if (this.isEngOrKor(this.peek())) {
                 token = new Token(this.curChar, TokenType.DOT)
                 this.afterDot = true
             } else {
-                this.error("Illegal character after dot.")
+                // this.error("Illegal character after dot.")
+                this.error(". 뒤에 이상한 문자 : " + this.peek())
             }
         }
         else if (this.curChar == "\"") {
@@ -99,7 +102,8 @@
 
             while (this.curChar != "\"") {
                 if (this.curChar == "\n") {
-                    this.error("Unterminated string literal")
+                    // this.error("Unterminated string literal")
+                    this.error("문자열이 쌍따옴표로 끝나지 않음")
                 }
                 this.nextChar()
             }
@@ -115,7 +119,8 @@
             if (this.peek() == ".") {
                 this.nextChar()
                 if (!this.isDigit(this.peek())) {
-                    this.error("Illegal character in number.")
+                    // this.error("Illegal character in number.")
+                    this.error("숫자 소수점 뒤에 이상한 문자 : " + this.peek())
                 }
                 while (this.isDigit(this.peek())) {
                     this.nextChar()
@@ -141,7 +146,8 @@
         }
         
         else {
-            this.error("Unknown character: " + this.curChar)
+            // this.error("Unknown character: " + this.curChar)
+            this.error("이상한 문자 : " + this.curChar)
         }
 
         this.nextChar()
@@ -149,7 +155,8 @@
     }
 
     Lexer.prototype.error = function(message) {
-        throw new Error("Lexer error: " + message)
+        // throw new Error("Lexer error: " + message)
+        throw new Error(this.line + "번째 줄에서 에러, " + message)
     }
 
     Lexer.prototype.skipWhitespace = function() {

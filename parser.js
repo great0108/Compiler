@@ -34,7 +34,8 @@
 
     Parser.prototype.match = function(type) {
         if (!this.checkToken(type)) {
-            this.error("Expected " + type + ", got " + this.curToken.type)
+            // this.error("Expected " + type + ", got " + this.curToken.type)
+            this.error(type + " 대신 다른 이상한 문자 : " + this.curToken.text)
         }
         this.nextToken()
     }
@@ -44,8 +45,9 @@
         this.peekToken = this.lexer.getToken()
     }
 
-    Parser.prototype.error = function(message, line, text) {
-        throw new Error("Parser error: " + message)
+    Parser.prototype.error = function(message) {
+        // throw new Error("Parser error: " + message)
+        throw new Error(this.line + "번째 줄에서 에러, " + message)
     }
 
     Parser.prototype.program = function() {
@@ -56,9 +58,10 @@
     }
 
     Parser.prototype.statement = function() {
+        console.log(this.line)
         if (this.checkToken(TokenType.NEWLINE)) {
             if (this.debug) console.log("newline")
-            this.nextToken()
+            this.newline()
             return
         }
 
@@ -108,11 +111,13 @@
                 this.expression()
                 this.generator.addLine()
             } else {
-                this.error("Invalid statement at " + this.curToken.text + " (" + this.curToken.type + ")")
+                // this.error("Invalid statement at " + this.curToken.text + " (" + this.curToken.type + ")")
+                this.error("잘못된 코드 : " + this.curToken.text)
             }
         }
         else {
-            this.error("Invalid statement at " + this.curToken.text + " (" + this.curToken.type + ")")
+            // this.error("Invalid statement at " + this.curToken.text + " (" + this.curToken.type + ")")
+            this.error("잘못된 코드 : " + this.curToken.text)
         }
         this.newline()
     }
@@ -135,14 +140,15 @@
                 this.else()
             }
         } else if (this.checkToken(TokenType.NEWLINE)) {
-            this.nextToken()
+            this.newline()
             this.generator.addLine("{")
 
             while (!this.checkToken(TokenType.END)) {
                 this.statement()
             }
         } else {
-            this.error("Unexpected token at " + this.curToken.text)
+            // this.error("Unexpected token at " + this.curToken.text)
+            this.error("else 뒤에 이상한 문자 : " + this.curToken.text)
         }
     }
 
@@ -265,7 +271,8 @@
                         this.nextToken()
                     }
                 } else {
-                    this.error("Unexpected token at " + this.curToken.text)
+                    // this.error("Unexpected token at " + this.curToken.text)
+                    this.error(". 뒤에 이상한 문자 : " + this.curToken.text)  // 이런 경우가 있나?
                 }
             }
         }
@@ -279,6 +286,9 @@
             this.generator.add("(")
             this.nextToken()
             this.expression()
+            while (this.checkToken(TokenType.NEWLINE)) {
+                this.newline()
+            }
             this.match(TokenType.RB)
             this.generator.add(")")
         } else if (this.checkToken(TokenType.NUMBER)) {
@@ -295,7 +305,8 @@
             this.nextToken()
         } else if (this.checkToken(TokenType.IDENT)) {
             if (!this.variables.has(this.curToken.text)) {
-                this.error("Referencing variable before assignment: " + this.curToken.text)
+                // this.error("Referencing variable before assignment: " + this.curToken.text)
+                this.error("선언하지 않은 변수를 사용함 : " + this.curToken.text)
             }
             if (this.checkPeek(TokenType.LB)) {
                 this.functionCall()
@@ -304,14 +315,14 @@
                 this.nextToken()
             }
         } else {
-            this.error("Unexpected token at " + this.curToken.text + ", type " + this.curToken.type)
+            // this.error("Unexpected token at " + this.curToken.text)
+            this.error("이상한 문자 : " + this.curToken.text)
         }
     }
 
     Parser.prototype.newline = function() {
         this.match(TokenType.NEWLINE)
         this.line += 1
-        this.lexer.line = this.line
     }
 
     module.exports = Parser

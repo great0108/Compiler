@@ -9,8 +9,8 @@
         STRING : "STRING",
         TRUE : "TRUE",
         FALSE : "FALSE",
-        DOT : "DOT",
-        COMMA : "COMMA",
+        DOT : ".",
+        COMMA : ",",
         
         // keywords
         PRINT : "PRINT",
@@ -19,21 +19,21 @@
         END : "END",
 
         // operators
-        EQ : "EQ",
-        PLUS : "PLUS",
-        MINUS : "MINUS",
-        ASTERISK : "ASTERISK",
-        SLASH : "SLASH",
-        PERSENT : "PERSENT",
-        CARET : "CARET",
-        LB : "LB",
-        RB : "RB",
-        EQEQ : "EQEQ",
-        NOTEQ : "NOTEQ",
-        LT : "LT",
-        LTEQ : "LTEQ",
-        GT : "GT",
-        GTEQ : "GTEQ",
+        EQ : "=",
+        PLUS : "+",
+        MINUS : "-",
+        ASTERISK : "*",
+        SLASH : "/",
+        PERSENT : "%",
+        CARET : "^",
+        LB : "(",
+        RB : ")",
+        EQEQ : "==",
+        NOTEQ : "!=",
+        LT : "<",
+        LTEQ : "<=",
+        GT : ">",
+        GTEQ : ">=",
         AND : "AND",
         OR : "OR",
         NOT : "NOT"
@@ -50,6 +50,10 @@
             return tokenText
         }
         return null
+    }
+
+    Token.getString = function(type) {
+
     }
 
     module.exports = {
