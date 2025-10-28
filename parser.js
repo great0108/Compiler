@@ -9,6 +9,7 @@
         
         this.curToken = null
         this.peekToken = null
+        this.line = 1
 
         let preVariables = ["isNaN", "console"]
         this.variables = new Set(preVariables)
@@ -43,7 +44,7 @@
         this.peekToken = this.lexer.getToken()
     }
 
-    Parser.prototype.error = function(message) {
+    Parser.prototype.error = function(message, line, text) {
         throw new Error("Parser error: " + message)
     }
 
@@ -155,10 +156,16 @@
             this.generator.add(")")
         } else {
             this.expression()
+            while (this.checkToken(TokenType.NEWLINE)) {
+                this.newline()
+            }
             while (!this.checkToken(TokenType.RB)) {
                 this.match(TokenType.COMMA)
                 this.generator.add(",")
                 this.expression()
+                while (this.checkToken(TokenType.NEWLINE)) {
+                    this.newline()
+                }
             }
             this.nextToken()
             this.generator.add(")")
@@ -265,7 +272,10 @@
     }
 
     Parser.prototype.primary = function() {
-        if (this.checkToken(TokenType.LB)) {
+        if (this.checkToken(TokenType.NEWLINE)) {
+            this.newline()
+            this.primary()
+        } else if (this.checkToken(TokenType.LB)) {
             this.generator.add("(")
             this.nextToken()
             this.expression()
@@ -294,12 +304,14 @@
                 this.nextToken()
             }
         } else {
-            this.error("Unexpected token at " + this.curToken.text)
+            this.error("Unexpected token at " + this.curToken.text + ", type " + this.curToken.type)
         }
     }
 
     Parser.prototype.newline = function() {
         this.match(TokenType.NEWLINE)
+        this.line += 1
+        this.lexer.line = this.line
     }
 
     module.exports = Parser

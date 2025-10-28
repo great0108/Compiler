@@ -68,7 +68,13 @@
     }
 
     function checkTypo(str, keywords) {
-        
+        if(str.length < 3) return null
+        for(let keyword in keywords) {
+            if(editDistance(str, keyword) == 1) {
+                return keyword
+            }
+        }
+        return null
     }
 
 return {

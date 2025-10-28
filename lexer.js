@@ -6,6 +6,7 @@
         this.source = source + "\n"
         this.curChar = ""
         this.curPos = -1
+        this.line = 1  // get from parser
         this.afterDot = false
         this.nextChar()
     }
