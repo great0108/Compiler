@@ -5,20 +5,28 @@
     const Parser = require("./parser.js")
     const Generator = require("./generator.js")
 
+    function compile(source, env, language) {
+        let lexer = new Lexer(source)
+        let generator = new Generator(env)
+        let parser = new Parser(lexer, generator, language, true)
+        let code = parser.program()
+        return code
+    }
+
     let source = `a = 3
-IF a < 1 
+만약 a < 1 
     a = 1+1
-ELSE IF a < 2
+아니면 만약 a < 2
     a = 3
-ELSE
+아니면
     a = 4
-END
+끝
 
 // test
 b = "a" +
     "b"
 c = 2^3-4*5%((6-1))
-d = NOT (a != b OR TRUE AND a > 2)
+d = 아니 (a != b 또는 (참 그리고 a > 2))
 PRINT a
 PRINT b.length
 PRINT c
@@ -29,18 +37,7 @@ a
 console.log(a)
 `
 
-    let source2 = "a = 1\nab.abc"
-    let lexer = new Lexer(source)
-    // let token = lexer.getToken()
-    // while (token.type != TokenType.EOF) {
-    //     console.log(token.type, token.text)
-    //     token = lexer.getToken()
-    // }
-    let generator = new Generator()
-    let parser = new Parser(lexer, generator, true)
-
-    let code = parser.program()
-    console.log()
+    let code = compile(source, "node", "kor")
     console.log(code)
     eval(code)
 })()

@@ -5,12 +5,17 @@
     const Generator = require("./generator.js")
 
     function compile(source, env, language) {
-        
+        let lexer = new Lexer(source)
+        let generator = new Generator(env)
+        let parser = new Parser(lexer, generator, language)
+        let code = parser.program()
+        return code
     }
 
     module.exports = {
         Lexer : Lexer,
         Parser : Parser,
-        Generator : Generator
+        Generator : Generator,
+        compile : compile
     }
 })()

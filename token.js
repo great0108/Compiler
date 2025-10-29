@@ -41,6 +41,8 @@
 
     const Keywords = ["PRINT", "IF", "ELSE", "END", "AND", "OR", "NOT", "TRUE", "FALSE"]
 
+    const KorKeywords = ["출력", "만약", "아니면", "끝", "그리고", "또는", "아니", "참", "거짓"]
+
     function Token(tokenText, tokenType) {
         this.text = tokenText
         this.type = tokenType
@@ -49,6 +51,8 @@
     Token.checkKeyword = function(tokenText) {
         if (Keywords.includes(tokenText)) {
             return tokenText
+        } else if (KorKeywords.includes(tokenText)) {
+            return Keywords[KorKeywords.indexOf(tokenText)]
         }
         return null
     }
@@ -60,6 +64,7 @@
     module.exports = {
         TokenType: TokenType,
         Token: Token,
-        Keywords : Keywords
+        Keywords : Keywords,
+        KorKeywords : KorKeywords
     }
 })()

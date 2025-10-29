@@ -1,6 +1,6 @@
 (function() {
     "use strict"
-    const {TokenType, Keywords} = require("./token.js")
+    const {TokenType, Keywords, KorKeywords} = require("./token.js")
     const {checkTypo} = require("./textSimilarity.js")
 
     function Parser(lexer, generator, language, debug) {
@@ -36,6 +36,9 @@
 
     Parser.prototype.match = function(type) {
         if (!this.checkToken(type)) {
+            if(this.language == "kor" && Keywords.includes(type)) {
+                type = KorKeywords[Keywords.indexOf(type)]
+            }
             // this.error("Expected " + type + ", got " + this.curToken.type)
             this.error(type + " 대신 다른 이상한 문자 : " + this.curToken.text)
         }
@@ -49,7 +52,7 @@
 
     Parser.prototype.error = function(message, tokenText) {
         if(tokenText !== undefined) {
-            let keywords = Keywords.concat(Array.from(this.variables))
+            let keywords = Keywords.concat(KorKeywords, Array.from(this.variables))
             let result = checkTypo(tokenText, keywords)
             if(result) {
                 throw new Error(this.line + "번째 줄에서 에러, " + message + "\n" + result + "를 사용하고 싶으셨나요?")
@@ -67,7 +70,6 @@
     }
 
     Parser.prototype.statement = function() {
-        console.log(this.line)
         if (this.checkToken(TokenType.NEWLINE)) {
             if (this.debug) console.log("newline")
             this.newline()
