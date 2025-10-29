@@ -12,6 +12,7 @@
         this.curToken = null
         this.peekToken = null
         this.line = 1
+        this.shouldEnd = false
 
         let preVariables = ["isNaN", "console"]
         this.variables = new Set(preVariables)
@@ -97,6 +98,7 @@
             this.expression()
             this.newline()
             this.generator.addLine("){")
+            this.shouldEnd = true
 
             while (!this.checkToken(TokenType.END) && !this.checkToken(TokenType.ELSE)) {
                 this.statement()
@@ -124,6 +126,15 @@
             } else {
                 // this.error("Invalid statement at " + this.curToken.text)
                 this.error("잘못된 코드 : " + this.curToken.text, this.curToken.text)
+            }
+        } else if (this.checkToken(TokenType.EOF)) {
+            if (this.shouldEnd) {
+                if(this.language == "kor") {
+                    this.error("만약문이 끝 으로 끝나지 않음")
+                }
+                this.error("if문이 END로 끝나지 않음")
+            } else {
+                this.error("잘못된 코드 : " + this.curToken.text)
             }
         }
         else {
@@ -177,7 +188,10 @@
                 this.newline()
             }
             while (!this.checkToken(TokenType.RB)) {
-                this.match(TokenType.COMMA)
+                if (!this.checkToken(TokenType.COMMA)) {
+                    this.error(") 대신 다른 이상한 문자 : " + this.curToken.text)
+                }
+                this.nextToken()
                 this.generator.add(",")
                 this.expression()
                 while (this.checkToken(TokenType.NEWLINE)) {

@@ -3,20 +3,18 @@
 
     const TokenType = {
         EOF : "EOF",
-        NEWLINE: "NEWLINE",
-        NUMBER : "NUMBER",
         IDENT  : "IDENT",
-        STRING : "STRING",
-        TRUE : "TRUE",
-        FALSE : "FALSE",
-        DOT : ".",
-        COMMA : ",",
+        NEWLINE: "줄바꿈",
+        NUMBER : "숫자",
+        STRING : "문자열",
         
         // keywords
         PRINT : "PRINT",
         IF : "IF",
         ELSE : "ELSE",
         END : "END",
+        TRUE : "TRUE",
+        FALSE : "FALSE",
 
         // operators
         EQ : "=",
@@ -34,6 +32,8 @@
         LTEQ : "<=",
         GT : ">",
         GTEQ : ">=",
+        DOT : ".",
+        COMMA : ",",
         AND : "AND",
         OR : "OR",
         NOT : "NOT"
