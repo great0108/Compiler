@@ -130,7 +130,7 @@
             let numText = this.source.slice(startPos, this.curPos + 1)
             token = new Token(numText, TokenType.NUMBER)
         } else if (this.isEngOrKor(this.curChar)) {
-            let startPos = this.curPos
+            let startPos = this.curPos 
             while (this.isEngKorOrDigit(this.peek())) {
                 this.nextChar()
             }

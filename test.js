@@ -34,7 +34,6 @@ PRINT d
 PRINT isNaN(
 a
 ) OR FALSE
-console.log(a)
 `
 
     let code = compile(source, "node", "kor")

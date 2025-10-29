@@ -57,10 +57,6 @@
         return null
     }
 
-    Token.getString = function(type) {
-
-    }
-
     module.exports = {
         TokenType: TokenType,
         Token: Token,
