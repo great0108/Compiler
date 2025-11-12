@@ -1,7 +1,8 @@
 (function() {
     "use strict"
     const {TokenType, Token} = require("./token.js")
-
+    const hint = "한글"  // 한글 깨짐 방지
+    
     function Lexer(source) {
         this.source = source + "\n"
         this.curChar = ""
