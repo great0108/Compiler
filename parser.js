@@ -56,7 +56,7 @@
             let keywords = Keywords.concat(KorKeywords, Array.from(this.variables))
             let result = checkTypo(tokenText, keywords)
             if(result) {
-                throw new Error(this.line + "번째 줄에서 에러, " + message + "\n" + result + "를 사용하고 싶으셨나요?")
+                throw new Error(this.line + "번째 줄에서 에러, " + message + "\n'" + result + "'을(를) 사용하고 싶으셨나요?")
             }
         }
         // throw new Error("Parser error: " + message)
@@ -130,9 +130,9 @@
         } else if (this.checkToken(TokenType.EOF)) {
             if (this.shouldEnd) {
                 if(this.language == "kor") {
-                    this.error("만약문이 끝 으로 끝나지 않음")
+                    this.error("만약문이 '끝' 으로 끝나지 않음")
                 }
-                this.error("if문이 END로 끝나지 않음")
+                this.error("if문이 'END'로 끝나지 않음")
             } else {
                 this.error("잘못된 코드 : " + this.curToken.text)
             }
