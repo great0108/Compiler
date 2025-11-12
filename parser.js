@@ -14,7 +14,35 @@
         this.line = 1
         this.shouldEnd = false
 
-        let preVariables = ["isNaN", "console"]
+        let preVariables = [
+            // class
+            "Array",
+            "Object",
+            "Function",
+            "Number",
+            "String",
+            "Map",
+            "Set",
+            "Math",
+            "Date",
+            "JSON",
+            "RegExp",
+            "Error",
+
+            // function
+            "eval",
+            "isFinite",
+            "isNaN",
+            "parseInt",
+            "parseFloat",
+            "console",  // for node
+
+            // value
+            "Infinity",
+            "NaN",
+            "undefined",
+            "null"
+        ]
         this.variables = new Set(preVariables)
 
         this.nextToken()
