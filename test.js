@@ -4,14 +4,16 @@
     const Lexer = require("./lexer.js")
     const Parser = require("./parser.js")
     const Generator = require("./generator.js")
+    const modules = require("./modules.js")
 
     function compile(source, env, language) {
         let lexer = new Lexer(source)
-        let generator = new Generator(env)
-        let parser = new Parser(lexer, generator, language, true)
+        let generator = new Generator(env, language)
+        let parser = new Parser(lexer, generator, language)
         let code = parser.program()
         return code
     }
+
 
     let source = `a = 3
 만약 a < 1 

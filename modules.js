@@ -76,7 +76,38 @@
 
     // Date
     const 날짜 = {
-
+        "년" : function() {
+            return new Date().getFullYear()
+        },
+        "월" : function() {
+            return new Date().getMonth() + 1
+        },
+        "요일" : function() {
+            let day = new Date().getDay()
+            let name = ["일", "월", "화", "수", "목", "금", "토"]
+            return name[day]
+        },
+        "일" : function() {
+            return new Date().getDate()
+        },
+        "시" : function() {
+            return new Date().getHours()
+        },
+        "분" : function() {
+            return new Date().getMinutes()
+        },
+        "초" : function() {
+            return new Date().getSeconds()
+        },
+        "밀리초" : function() {
+            return new Date().getMilliseconds()
+        },
+        "현재" : function() {
+            return new Date().toLocaleString()
+        },
+        "숫자" : function() {
+            return Date.now()
+        }
     }  
 
 
@@ -107,9 +138,9 @@
         Str : Str,
         수학 : 수학,
         날짜 : 날짜,
-        숫자인가 : 숫자인가,
         isInteger : isInteger,
         정수인가 : 정수인가,
+        숫자인가 : 숫자인가,
         자료형 : 자료형
     }
     
