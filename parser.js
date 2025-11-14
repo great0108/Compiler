@@ -28,6 +28,7 @@
             "JSON",
             "RegExp",
             "Error",
+            "FileStream",
 
             // function
             "eval",
@@ -46,10 +47,16 @@
             // module
             "수학",
             "날짜",
+            "숫자",
+            "문자",
             "isInteger",
             "정수인가",
             "숫자인가",
-            "자료형"
+            "자료형",
+            "save",
+            "load",
+            "저장",
+            "불러오기"
         ]
         this.variables = new Set(preVariables)
 

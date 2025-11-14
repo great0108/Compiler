@@ -72,6 +72,8 @@
     
     Object.assign(수학, Math)
 
+    const 숫자 = Number
+    const 문자 = String
 
     // Date
     const 날짜 = {
@@ -115,13 +117,13 @@
         return !isNaN(x)
     }
 
-    function isInteger(x) {
+    const isInteger = function(x) {
         return Number.isInteger(Number(x))
     }
 
     const 정수인가 = isInteger
 
-    function 자료형(x) {
+    const 자료형 = function(x) {
         if(typeof x == "number") {
             return "숫자"
         } else if(typeof x == "string") {
@@ -135,14 +137,44 @@
         }
     }
 
+    const save = function(path, json) {
+        json = JSON.stringify(json)
+        if(setting.nodeJS) {
+            const fs = require("fs")
+            fs.writeFileSync(path, json, "utf-8")
+        } else {
+            FileStream.write(setting.module_path + "/" + path, json)
+        }
+    }
+
+    const load = function(path) {
+        let json = null
+        if(setting.nodeJS) {
+            const fs = require("fs")
+            json = fs.readFileSync(path, "utf-8")
+        } else {
+            json = FileStream.read(setting.module_path + "/" + path)
+        }
+        return JSON.parse(json)
+    }
+
+    const 저장 = save
+    const 불러오기 = load
+
     module.exports = {
         _Str : Str,
         수학 : 수학,
         날짜 : 날짜,
+        숫자 : 숫자,
+        문자 : 문자,
         isInteger : isInteger,
         정수인가 : 정수인가,
         숫자인가 : 숫자인가,
-        자료형 : 자료형
+        자료형 : 자료형,
+        save : save,
+        load : load,
+        저장 : 저장,
+        불러오기 : 불러오기
     }
     
 })()
