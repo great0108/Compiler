@@ -4,12 +4,12 @@
     const Lexer = require("./lexer.js")
     const Parser = require("./parser.js")
     const Generator = require("./generator.js")
-    const modules = require("./modules.js")
+    const compileModules = require("./modules.js")
 
     function compile(source, env, language) {
         let lexer = new Lexer(source)
         let generator = new Generator(env, language)
-        let parser = new Parser(lexer, generator, language)
+        let parser = new Parser(lexer, generator, language, true)
         let code = parser.program()
         return code
     }
@@ -38,7 +38,13 @@ a
 ) OR FALSE
 `
 
-    let code = compile(source, "node", "kor")
+    let source2 = `a = "안녕하세요"
+    PRINT a.자르기(2, 4)
+    PRINT 수학.반올림(3.5)
+    PRINT 날짜.월
+    PRINT 정수인가("3") 그리고 숫자인가("-0.4")
+    `
+    let code = compile(source2, "node", "kor")
     console.log(code)
     eval(code)
 })()

@@ -2,8 +2,7 @@
     "use strict"
 
     // class
-    const Str = {}  // String.prototype
-    Object.defineProperties(Str, {
+    const Str = {  // String.prototype
         "시작" : {
             value : String.prototype.startsWith,
         },
@@ -51,7 +50,7 @@
         "다듬기" : {
             value : String.prototype.trim
         }
-    })
+    }
 
     // Math
     const 수학 = {
@@ -76,43 +75,45 @@
 
     // Date
     const 날짜 = {
-        "년" : function() {
+        get "년"() {
             return new Date().getFullYear()
         },
-        "월" : function() {
+        get "월"() {
             return new Date().getMonth() + 1
         },
-        "요일" : function() {
+        get "요일"() {
             let day = new Date().getDay()
             let name = ["일", "월", "화", "수", "목", "금", "토"]
             return name[day]
         },
-        "일" : function() {
+        get "일"() {
             return new Date().getDate()
         },
-        "시" : function() {
+        get "시"() {
             return new Date().getHours()
         },
-        "분" : function() {
+        get "분"() {
             return new Date().getMinutes()
         },
-        "초" : function() {
+        get "초"() {
             return new Date().getSeconds()
         },
-        "밀리초" : function() {
+        get "밀리초"() {
             return new Date().getMilliseconds()
         },
-        "현재" : function() {
+        get "현재"() {
             return new Date().toLocaleString()
         },
-        "숫자" : function() {
+        get "숫자"() {
             return Date.now()
         }
     }  
 
 
     // function
-    const 숫자인가 = isNaN
+    const 숫자인가 = function(x) {
+        return !isNaN(x)
+    }
 
     function isInteger(x) {
         return Number.isInteger(Number(x))
@@ -135,7 +136,7 @@
     }
 
     module.exports = {
-        Str : Str,
+        _Str : Str,
         수학 : 수학,
         날짜 : 날짜,
         isInteger : isInteger,

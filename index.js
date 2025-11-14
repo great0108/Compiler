@@ -3,6 +3,7 @@
     const Lexer = require("./lexer.js")
     const Parser = require("./parser.js")
     const Generator = require("./generator.js")
+    const compileModules = require("./modules.js")
 
     function compile(source, env, language) {
         let lexer = new Lexer(source)
@@ -16,6 +17,7 @@
         Lexer : Lexer,
         Parser : Parser,
         Generator : Generator,
-        compile : compile
+        compile : compile,
+        compileModules : compileModules
     }
 })()

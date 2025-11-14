@@ -4,8 +4,8 @@
     function Generator(env, language) {
         this.env = env === undefined ? "node" : env
         this.language = language === undefined ? "eng" : language
-        this.header = "const {Str, 수학, 날짜, isInteger, 정수인가, 숫자인가, 자료형} = modules\n" +
-                      "Object.assign(String.prototype, Str)\n"
+        this.header = "const {_Str, 수학, 날짜, isInteger, 정수인가, 숫자인가, 자료형} = compileModules\n" +
+                      "Object.defineProperties(String.prototype, _Str)\n"
         this.code = ""
         this.language = language
 

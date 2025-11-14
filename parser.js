@@ -41,7 +41,15 @@
             "Infinity",
             "NaN",
             "undefined",
-            "null"
+            "null",
+
+            // module
+            "수학",
+            "날짜",
+            "isInteger",
+            "정수인가",
+            "숫자인가",
+            "자료형"
         ]
         this.variables = new Set(preVariables)
 
@@ -140,6 +148,7 @@
         } else if (this.checkToken(TokenType.IDENT)) {
             if (this.checkPeek(TokenType.LB) || this.checkPeek(TokenType.DOT)) {
                 this.expression()
+                this.generator.addLine()
             } else if (this.checkPeek(TokenType.EQ)) {
                 if (this.debug) console.log("assign")
                 if (!this.variables.has(this.curToken.text)) {
