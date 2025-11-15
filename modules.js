@@ -64,6 +64,10 @@
             }
             return Math.random() * (end - start) + start
         },
+        "랜덤정수" : function(start, end) {
+            let rand = this.랜덤(start, end+1)
+            return Math.floor(rand)
+        },
         "최소" : Math.min,
         "최대" : Math.max,
         "루트" : Math.sqrt,
@@ -136,30 +140,47 @@
             return typeof x
         }
     }
-
-    const save = function(path, json) {
-        json = JSON.stringify(json)
-        if(setting.nodeJS) {
-            const fs = require("fs")
-            fs.writeFileSync(path, json, "utf-8")
-        } else {
-            FileStream.write(setting.module_path + "/" + path, json)
+    
+    const _save = function(env) {
+        if(env == "node") {
+            return save_node
+        } else if(env == "api2") {
+            return save_api2
         }
     }
 
-    const load = function(path) {
-        let json = null
-        if(setting.nodeJS) {
-            const fs = require("fs")
-            json = fs.readFileSync(path, "utf-8")
-        } else {
-            json = FileStream.read(setting.module_path + "/" + path)
+    const save_node = function(path, json) {
+        json = JSON.stringify(json)
+        const fs = require("fs")
+        fs.writeFileSync(path, json, "utf-8")
+    }
+
+    const save_api2 = function(path, json) {
+        json = JSON.stringify(json)
+        FileStream.write(path, json)
+    }
+
+    const _load = function(env) {
+        if(env == "node") {
+            return load_node
+        } else if(env == "api2") {
+            return load_api2
         }
+    }
+
+    const load_node = function(path) {
+        const fs = require("fs")
+        if(!fs.existsSync(path)) {
+            return null
+        }
+        let json = fs.readFileSync(path, "utf-8")
         return JSON.parse(json)
     }
 
-    const 저장 = save
-    const 불러오기 = load
+    const load_api2 = function(path) {
+        let json = FileStream.read(path)
+        return JSON.parse(json)
+    }
 
     module.exports = {
         _Str : Str,
@@ -171,10 +192,8 @@
         정수인가 : 정수인가,
         숫자인가 : 숫자인가,
         자료형 : 자료형,
-        save : save,
-        load : load,
-        저장 : 저장,
-        불러오기 : 불러오기
+        _save : _save,
+        _load : _load,
     }
     
 })()

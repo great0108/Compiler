@@ -4,7 +4,7 @@
     function Generator(env, language) {
         this.env = env === undefined ? "node" : env
         this.language = language === undefined ? "eng" : language
-        this.header = "const {_Str, 수학, 날짜, 숫자, 문자, isInteger, 정수인가, 숫자인가, 자료형, save, load, 저장, 불러오기} = compileModules\n" +
+        this.header = "const {_Str, 수학, 날짜, 숫자, 문자, isInteger, 정수인가, 숫자인가, 자료형, _save, _load} = compileModules\n" +
                       "Object.defineProperties(String.prototype, _Str)\n"
         this.code = ""
         this.language = language
@@ -12,7 +12,12 @@
         this.languageHeader()
         if (this.env == "api2") {
             this.api2Header()
+        } else if(this.env == "node") {
+            this.nodeHeader()
         }
+
+        this.header += "const 저장 = save\n" +
+                       "const 불러오기 = load\n"
     }
 
     Generator.prototype.add = function(code) {
@@ -37,6 +42,8 @@
     }
 
     Generator.prototype.api2Header = function() {
+        this.header += "const save = _save('api2')\n" + 
+                       "const load = _load('api2')\n"
         if(this.language == "eng") {
             this.header += "var message = msg.content\n" +
                        "var room = msg.room\n" + 
@@ -46,6 +53,11 @@
                        "var 방이름 = msg.room\n" + 
                        "var 보낸사람 = msg.author.name\n"
         }
+    }
+
+    Generator.prototype.nodeHeader = function() {
+        this.header += "const save = _save('node')\n" +
+                       "const load = _load('node')\n"
     }
 
     Generator.prototype.languageHeader = function() {

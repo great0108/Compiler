@@ -56,7 +56,16 @@
             "save",
             "load",
             "저장",
-            "불러오기"
+            "불러오기",
+
+            // api2
+            "msg",
+            "message",
+            "room",
+            "sender",
+            "메시지",
+            "방이름",
+            "보낸사람"
         ]
         this.variables = new Set(preVariables)
 
