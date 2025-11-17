@@ -43,6 +43,8 @@ a
     PRINT 날짜.월
     PRINT 정수인가("3") 그리고 숫자인가("-0.4")
     `
+
+    compileModules.File.dataPath = "."
     let code = compile(source2, "node", "kor")
     console.log(code)
     eval(code)

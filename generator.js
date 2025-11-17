@@ -5,7 +5,7 @@
         this.env = env === undefined ? "node" : env
         this.language = language === undefined ? "eng" : language
         // const {_Str, 수학, 날짜, 숫자, 문자, isInteger, 정수인가, 숫자인가, 자료형, _save, _load} = compileModules\n"
-        this.header = "const {_Str, \uC218\uD559, \uB0A0\uC9DC, \uC22B\uC790, \uBB38\uC790, isInteger, \uC815\uC218\uC778\uAC00, \uC22B\uC790\uC778\uAC00, \uC790\uB8CC\uD615, _save, _load} = compileModules\n" +
+        this.header = "const {_Str, \uC218\uD559, \uB0A0\uC9DC, \uC22B\uC790, \uBB38\uC790, isInteger, \uC815\uC218\uC778\uAC00, \uC22B\uC790\uC778\uAC00, \uC790\uB8CC\uD615, File} = compileModules\n" +
                       "Object.defineProperties(String.prototype, _Str)\n"
         this.code = ""
         this.language = language
@@ -45,8 +45,8 @@
     }
 
     Generator.prototype.api2Header = function() {
-        this.header += "const save = _save('api2')\n" + 
-                       "const load = _load('api2')\n"
+        this.header += "const save = File._save('api2')\n" + 
+                       "const load = File._load('api2')\n"
         if(this.language == "eng") {
             this.header += "var message = msg.content\n" +
                        "var room = msg.room\n" + 
@@ -62,8 +62,8 @@
     }
 
     Generator.prototype.nodeHeader = function() {
-        this.header += "const save = _save('node')\n" +
-                       "const load = _load('node')\n"
+        this.header += "const save = File._save('node')\n" +
+                       "const load = File._load('node')\n"
     }
 
     Generator.prototype.languageHeader = function() {

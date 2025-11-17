@@ -139,46 +139,52 @@
             return typeof x
         }
     }
-    
-    const _save = function(env) {
-        if(env == "node") {
-            return save_node
-        } else if(env == "api2") {
-            return save_api2
+
+    const File = {
+        dataPath : "sdcard/CompilerBots",
+        _save : function(env) {
+            let folder = this.dataPath
+
+            function save_node(path, json) {
+                json = JSON.stringify(json)
+                const fs = require("fs")
+                fs.writeFileSync(folder + "/" + path + ".txt", json, "utf-8")
+            }
+
+            function save_api2(path, json) {
+                json = JSON.stringify(json)
+                FileStream.write(folder + "/" + path + ".txt", json)
+            }
+            
+            if(env == "node") {
+                return save_node
+            } else if(env == "api2") {
+                return save_api2
+            }
+        },
+        _load : function(env) {
+            let folder = this.dataPath
+
+            function load_node(path) {
+                const fs = require("fs")
+                if(!fs.existsSync(folder + "/" + path + ".txt")) {
+                    return null
+                }
+                let json = fs.readFileSync(folder + "/" + path + ".txt", "utf-8")
+                return JSON.parse(json)
+            }
+
+            function load_api2(path) {
+                let json = FileStream.read(folder + "/" + path + ".txt")
+                return JSON.parse(json)
+            }
+
+            if(env == "node") {
+                return load_node
+            } else if(env == "api2") {
+                return load_api2
+            }
         }
-    }
-
-    const save_node = function(path, json) {
-        json = JSON.stringify(json)
-        const fs = require("fs")
-        fs.writeFileSync(path, json, "utf-8")
-    }
-
-    const save_api2 = function(path, json) {
-        json = JSON.stringify(json)
-        FileStream.write(path, json)
-    }
-
-    const _load = function(env) {
-        if(env == "node") {
-            return load_node
-        } else if(env == "api2") {
-            return load_api2
-        }
-    }
-
-    const load_node = function(path) {
-        const fs = require("fs")
-        if(!fs.existsSync(path)) {
-            return null
-        }
-        let json = fs.readFileSync(path, "utf-8")
-        return JSON.parse(json)
-    }
-
-    const load_api2 = function(path) {
-        let json = FileStream.read(path)
-        return JSON.parse(json)
     }
 
     module.exports = {
@@ -191,8 +197,7 @@
         "\uC815\uC218\uC778\uAC00" : isInteger,  // 정수인가
         "\uC22B\uC790\uC778\uAC00" : isNum,  // 숫자인가
         "\uC790\uB8CC\uD615" : dataType,  // 자료형
-        _save : _save,
-        _load : _load,
+        File : File
     }
     
 })()

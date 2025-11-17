@@ -25,6 +25,8 @@ let source = `
   끝
 끝
 `
+
+compileModules.File.dataPath = "."
 function onMessage (msg) {
   let code = compile(source, "api2", "kor")
   eval(code)
