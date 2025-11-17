@@ -7,7 +7,7 @@
 
     function compile(source, env, language) {
         let lexer = new Lexer(source)
-        let generator = new Generator(env)
+        let generator = new Generator(env, language)
         let parser = new Parser(lexer, generator, language)
         let code = parser.program()
         return code

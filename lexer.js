@@ -180,12 +180,12 @@
     }
 
     Lexer.prototype.isEngOrKor = function(char) {
-        const regex = /[a-zA-Z]|[가-힣]|_/;
+        const regex = /[a-zA-Z]|[\uAC00-\uD7AF]|_/;
         return regex.test(char)
     }
 
     Lexer.prototype.isEngKorOrDigit = function(char) {
-        const regex = /[a-zA-Z]|[가-힣]|_|[0-9]/;
+        const regex = /[a-zA-Z]|[\uAC00-\uD7AF]|_|[0-9]/;
         return regex.test(char)
     }
 

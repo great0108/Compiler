@@ -3,6 +3,18 @@
     const {TokenType, Keywords, KorKeywords} = require("./token.js")
     const {checkTypo} = require("./textSimilarity.js")
 
+    function toUnicode(str) {
+        let result = "";
+        for (let ch of str) {
+            let codePoint = ch.codePointAt(0);
+            let hex = codePoint.toString(16).toUpperCase();
+            result += '\\u' + hex.padStart(4, '0')
+        }
+        return result
+    }
+
+    console.log(toUnicode("자르기"))
+
     function Parser(lexer, generator, language, debug) {
         this.lexer = lexer
         this.generator = generator
@@ -45,27 +57,27 @@
             "null",
 
             // module
-            "수학",
-            "날짜",
-            "숫자",
-            "문자",
+            "\uC218\uD559",  // 수학
+            "\uB0A0\uC9DC",  // 날짜
+            "\uC22B\uC790",  // 숫자
+            "\uBB38\uC790",  // 문자
             "isInteger",
-            "정수인가",
-            "숫자인가",
-            "자료형",
+            "\uC815\uC218\uC778\uAC00",  // 정수인가
+            "\uC22B\uC790\uC778\uAC00",  // 숫자인가
+            "\uC790\uB8CC\uD615",  // 자료형
             "save",
             "load",
-            "저장",
-            "불러오기",
+            "\uC800\uC7A5",  // 저장
+            "\uBD88\uB7EC\uC624\uAE30",  // 불러오기
 
             // api2
             "msg",
             "message",
             "room",
             "sender",
-            "메시지",
-            "방이름",
-            "보낸사람"
+            "\uBA54\uC2DC\uC9C0",  // 메시지
+            "\uBC29\uC774\uB984",  // 방이름
+            "\uBCF4\uB0B8\uC0AC\uB78C"  // 보낸사람
         ]
         this.variables = new Set(preVariables)
 
@@ -242,7 +254,7 @@
             }
             while (!this.checkToken(TokenType.RB)) {
                 if (!this.checkToken(TokenType.COMMA)) {
-                    this.error(") 대신 다른 이상한 문자 : " + this.curToken.text)
+                    this.error(")나 , 대신 다른 이상한 문자 : " + this.curToken.text)
                 }
                 this.nextToken()
                 this.generator.add(",")

@@ -17,7 +17,7 @@
                 return this.indexOf(value, index) + 1
             }
         },
-        "자르기" : {
+        "\uC790\uB974\uAE30" : {
             value : function(start, end) {
                 if(typeof start == "number") {
                     start = start > 0 ? start - 1 : start
@@ -53,19 +53,22 @@
     }
 
     // Math
-    const 수학 = {
+    const Math_kor = {
         "내림" : Math.floor,
         "올림" : Math.ceil,
         "반올림" : Math.round,
-        "랜덤" : function(start, end) {
+        "rand" : function(start, end) {
             if(end === undefined) {
                 start = start === undefined ? 1 : start
                 return Math.random() * start
             }
             return Math.random() * (end - start) + start
         },
+        "랜덤" : function(start, end) {
+            return this.rand(start, end)
+        },
         "랜덤정수" : function(start, end) {
-            let rand = this.랜덤(start, end+1)
+            let rand = this.rand(start, end+1)
             return Math.floor(rand)
         },
         "최소" : Math.min,
@@ -74,13 +77,10 @@
         "절댓값" : Math.abs
     }
     
-    Object.assign(수학, Math)
-
-    const 숫자 = Number
-    const 문자 = String
+    Object.assign(Math_kor, Math)
 
     // Date
-    const 날짜 = {
+    const Date_kor = {
         get "년"() {
             return new Date().getFullYear()
         },
@@ -117,7 +117,7 @@
 
 
     // function
-    const 숫자인가 = function(x) {
+    const isNum = function(x) {
         return !isNaN(x)
     }
 
@@ -125,9 +125,7 @@
         return Number.isInteger(Number(x))
     }
 
-    const 정수인가 = isInteger
-
-    const 자료형 = function(x) {
+    const dataType = function(x) {
         if(typeof x == "number") {
             return "숫자"
         } else if(typeof x == "string") {
@@ -184,14 +182,14 @@
 
     module.exports = {
         _Str : Str,
-        수학 : 수학,
-        날짜 : 날짜,
-        숫자 : 숫자,
-        문자 : 문자,
-        isInteger : isInteger,
-        정수인가 : 정수인가,
-        숫자인가 : 숫자인가,
-        자료형 : 자료형,
+        "수학" : Math_kor,
+        "날짜" : Date_kor,
+        "숫자" : Number,
+        "문자" : String,
+        "isInteger" : isInteger,
+        "정수인가" : isInteger,
+        "숫자인가" : isNum,
+        "자료형" : dataType,
         _save : _save,
         _load : _load,
     }

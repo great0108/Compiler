@@ -4,9 +4,9 @@
     const TokenType = {
         EOF : "EOF",
         IDENT  : "IDENT",
-        NEWLINE: "줄바꿈",
-        NUMBER : "숫자",
-        STRING : "문자열",
+        NEWLINE: "NEWLINE",
+        NUMBER : "NUMBER",
+        STRING : "STRING",
         
         // keywords
         PRINT : "PRINT",
@@ -41,7 +41,8 @@
 
     const Keywords = ["PRINT", "IF", "ELSE", "END", "AND", "OR", "NOT", "TRUE", "FALSE"]
 
-    const KorKeywords = ["출력", "만약", "아니면", "끝", "그리고", "또는", "아니", "참", "거짓"]
+    // const KorKeywords = ["출력", "만약", "아니면", "끝", "그리고", "또는", "아니", "참", "거짓"]
+    const KorKeywords = ["\uCD9C\uB825", "\uB9CC\uC57D", "\uC544\uB2C8\uBA74", "\uB05D", "\uADF8\uB9AC\uACE0", "\uB610\uB294", "\uC544\uB2C8", "\uCC38", "\uAC70\uC9D3"]
 
     function Token(tokenText, tokenType) {
         this.text = tokenText
