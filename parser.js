@@ -13,7 +13,7 @@
         return result
     }
 
-    console.log(toUnicode("자르기"))
+    // console.log(toUnicode("거짓"))
 
     function Parser(lexer, generator, language, debug) {
         this.lexer = lexer

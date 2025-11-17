@@ -68,8 +68,9 @@
 
     Generator.prototype.languageHeader = function() {
         if(this.language == "kor") {
+            // "value : function() { return this.valueOf() ? '참' : '거짓' } })\n"
             this.header += "Object.defineProperty(Boolean.prototype, 'toString', {\n" +
-                           "value : function() { return this.valueOf() ? '참' : '거짓' } })\n"
+                           "value : function() { return this.valueOf() ? '\uCC38' : '\uAC70\uC9D3' } })\n"
         }
     }
 
