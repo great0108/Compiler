@@ -86,7 +86,8 @@
                 token = new Token(lastChar + this.curChar, TokenType.NOTEQ)
             } else {
                 // this.error("Expected !=, got !" + this.peek())
-                this.error("!= 대신 다른 이상한 문자 : !" + this.peek())
+                // this.error("!= 대신 다른 이상한 문자 : !" + this.peek())
+                this.error("\u0021\u003D\u0020\uB300\uC2E0\u0020\uB2E4\uB978\u0020\uC774\uC0C1\uD55C\u0020\uBB38\uC790\u0020\u003A\u0020\u0021" + this.peek())
             }
         } else if (this.curChar == ".") {
             if (this.isEngOrKor(this.peek())) {
@@ -94,7 +95,8 @@
                 this.afterDot = true
             } else {
                 // this.error("Illegal character after dot.")
-                this.error(". 뒤에 이상한 문자 : " + this.peek())
+                // this.error(". 뒤에 이상한 문자 : " + this.peek())
+                this.error("\u002E\u0020\uB4A4\uC5D0\u0020\uC774\uC0C1\uD55C\u0020\uBB38\uC790\u0020\u003A\u0020" + this.peek())
             }
         }
         else if (this.curChar == "\"") {
@@ -104,7 +106,8 @@
             while (this.curChar != "\"") {
                 if (this.curChar == "\n") {
                     // this.error("Unterminated string literal")
-                    this.error("문자열이 쌍따옴표로 끝나지 않음")
+                    // this.error("문자열이 쌍따옴표로 끝나지 않음")
+                    this.error("\uBB38\uC790\uC5F4\uC774\u0020\uC30D\uB530\uC634\uD45C\uB85C\u0020\uB05D\uB098\uC9C0\u0020\uC54A\uC74C")
                 }
                 this.nextChar()
             }
@@ -121,7 +124,8 @@
                 this.nextChar()
                 if (!this.isDigit(this.peek())) {
                     // this.error("Illegal character in number.")
-                    this.error("숫자 소수점 뒤에 이상한 문자 : " + this.peek())
+                    // this.error("숫자 소수점 뒤에 이상한 문자 : " + this.peek())
+                    this.error("\uC22B\uC790\u0020\uC18C\uC218\uC810\u0020\uB4A4\uC5D0\u0020\uC774\uC0C1\uD55C\u0020\uBB38\uC790\u0020\u003A\u0020" + this.peek())
                 }
                 while (this.isDigit(this.peek())) {
                     this.nextChar()
@@ -148,7 +152,8 @@
         
         else {
             // this.error("Unknown character: " + this.curChar)
-            this.error("이상한 문자 : " + this.curChar)
+            // this.error("이상한 문자 : " + this.curChar)
+            this.error("\uC774\uC0C1\uD55C\u0020\uBB38\uC790\u0020\u003A\u0020" + this.curChar)
         }
 
         this.nextChar()
@@ -157,7 +162,8 @@
 
     Lexer.prototype.error = function(message) {
         // throw new Error("Lexer error: " + message)
-        throw new Error(this.line + "번째 줄에서 에러, " + message)
+        // throw new Error(this.line + "번째 줄에서 에러, " + message)
+        throw new Error(this.line + "\uBC88\uC9F8\u0020\uC904\uC5D0\uC11C\u0020\uC5D0\uB7EC\u002C\u0020" + message)
     }
 
     Lexer.prototype.skipWhitespace = function() {
