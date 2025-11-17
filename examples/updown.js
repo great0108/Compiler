@@ -1,6 +1,9 @@
-const {compile, compileModules} = require("../index.js")
+const bot = BotManager.getCurrentBot();
+const {compile, compileModules} = require("Compiler")
 
-let source = `
+// const {compile, compileModules} = require("../index.js")  // for node
+
+let source = `// 메시지 = msg  // for node
 정답 = 불러오기("정답")
 게임중 = 불러오기("게임중")
 
@@ -27,7 +30,10 @@ let source = `
 `
 function onMessage (msg) {
   let code = compile(source, "api2", "kor")
+  // let code = compile(source, "node", "kor")  // for node
   eval(code)
 }
 
 bot.addListener(Event.MESSAGE, onMessage);
+
+// onMessage("/업다운") for node
