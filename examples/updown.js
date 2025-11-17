@@ -28,6 +28,8 @@ let source = `// 메시지 = msg  // for node
   끝
 끝
 `
+
+compileModules.File.dataPath = "."
 function onMessage (msg) {
   let code = compile(source, "api2", "kor")
   // let code = compile(source, "node", "kor")  // for node

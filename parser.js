@@ -45,27 +45,27 @@
             "null",
 
             // module
-            "수학",
-            "날짜",
-            "숫자",
-            "문자",
+            "\uC218\uD559",  // 수학
+            "\uB0A0\uC9DC",  // 날짜
+            "\uC22B\uC790",  // 숫자
+            "\uBB38\uC790",  // 문자
             "isInteger",
-            "정수인가",
-            "숫자인가",
-            "자료형",
+            "\uC815\uC218\uC778\uAC00",  // 정수인가
+            "\uC22B\uC790\uC778\uAC00",  // 숫자인가
+            "\uC790\uB8CC\uD615",  // 자료형
             "save",
             "load",
-            "저장",
-            "불러오기",
+            "\uC800\uC7A5",  // 저장
+            "\uBD88\uB7EC\uC624\uAE30",  // 불러오기
 
             // api2
             "msg",
             "message",
             "room",
             "sender",
-            "메시지",
-            "방이름",
-            "보낸사람"
+            "\uBA54\uC2DC\uC9C0",  // 메시지
+            "\uBC29\uC774\uB984",  // 방이름
+            "\uBCF4\uB0B8\uC0AC\uB78C"  // 보낸사람
         ]
         this.variables = new Set(preVariables)
 
@@ -93,7 +93,8 @@
                 type = KorKeywords[Keywords.indexOf(type)]
             }
             // this.error("Expected " + type + ", got " + this.curToken.type)
-            this.error(type + " 대신 다른 이상한 문자 : " + this.curToken.text)
+            // this.error(type + " 대신 다른 이상한 문자 : " + this.curToken.text)
+            this.error(type + "\u0020\uB300\uC2E0\u0020\uB2E4\uB978\u0020\uC774\uC0C1\uD55C\u0020\uBB38\uC790\u0020\u003A\u0020" + this.curToken.text)
         }
         this.nextToken()
     }
@@ -108,11 +109,13 @@
             let keywords = Keywords.concat(KorKeywords, Array.from(this.variables))
             let result = checkTypo(tokenText, keywords)
             if(result) {
-                throw new Error(this.line + "번째 줄에서 에러, " + message + "\n'" + result + "'을(를) 사용하고 싶으셨나요?")
+                // throw new Error(this.line + "번째 줄에서 에러, " + message + "\n'" + result + "'을(를) 사용하고 싶으셨나요?")
+                throw new Error(this.line + "\uBC88\uC9F8\u0020\uC904\uC5D0\uC11C\u0020\uC5D0\uB7EC\u002C\u0020" + message + "\n'" + result + "'\uC744\u0028\uB97C\u0029\u0020\uC0AC\uC6A9\uD558\uACE0\u0020\uC2F6\uC73C\uC168\uB098\uC694\u003F")
             }
         }
         // throw new Error("Parser error: " + message)
-        throw new Error(this.line + "번째 줄에서 에러, " + message)
+        // throw new Error(this.line + "번째 줄에서 에러, " + message)
+        throw new Error(this.line + "\uBC88\uC9F8\u0020\uC904\uC5D0\uC11C\u0020\uC5D0\uB7EC\u002C\u0020" + message)
     }
 
     Parser.prototype.program = function() {
@@ -178,21 +181,26 @@
                 this.generator.addLine()
             } else {
                 // this.error("Invalid statement at " + this.curToken.text)
-                this.error("잘못된 코드 : " + this.curToken.text, this.curToken.text)
+                // this.error("잘못된 코드 : " + this.curToken.text, this.curToken.text)
+                this.error("\uC798\uBABB\uB41C\u0020\uCF54\uB4DC\u0020\u003A\u0020" + this.curToken.text, this.curToken.text)
             }
         } else if (this.checkToken(TokenType.EOF)) {
             if (this.shouldEnd) {
                 if(this.language == "kor") {
-                    this.error("만약문이 '끝' 으로 끝나지 않음")
+                    // this.error("만약문이 '끝' 으로 끝나지 않음")
+                    this.error("\uB9CC\uC57D\uBB38\uC774\u0020\u0027\uB05D\u0027\u0020\uC73C\uB85C\u0020\uB05D\uB098\uC9C0\u0020\uC54A\uC74C")
                 }
-                this.error("if문이 'END'로 끝나지 않음")
+                // this.error("IF문이 'END'로 끝나지 않음")
+                this.error("\u0049\u0046\uBB38\uC774\u0020\u0027\u0045\u004E\u0044\u0027\uB85C\u0020\uB05D\uB098\uC9C0\u0020\uC54A\uC74C")
             } else {
-                this.error("잘못된 코드 : " + this.curToken.text)
+                // this.error("잘못된 코드 : " + this.curToken.text)
+                this.error("\uC798\uBABB\uB41C\u0020\uCF54\uB4DC\u0020\u003A\u0020" + this.curToken.text)
             }
         }
         else {
             // this.error("Invalid statement at " + this.curToken.text)
-            this.error("잘못된 코드 : " + this.curToken.text)
+            // this.error("잘못된 코드 : " + this.curToken.text)
+            this.error("\uC798\uBABB\uB41C\u0020\uCF54\uB4DC\u0020\u003A\u0020" + this.curToken.text)
         }
         this.newline()
     }
@@ -222,8 +230,13 @@
                 this.statement()
             }
         } else {
+            if(this.language == "kor") {
+                // this.error("'아니면' 뒤에 이상한 문자")
+                this.error("\u0027\uC544\uB2C8\uBA74\u0027\u0020\uB4A4\uC5D0\u0020\uC774\uC0C1\uD55C\u0020\uBB38\uC790")
+            }
             // this.error("Unexpected token at " + this.curToken.text)
-            this.error("else 뒤에 이상한 문자 : " + this.curToken.text)
+            // this.error("else 뒤에 이상한 문자 : " + this.curToken.text)
+            this.error("\u0027\u0045\u004C\u0053\u0045\u0027\u0020\uB4A4\uC5D0\u0020\uC774\uC0C1\uD55C\u0020\uBB38\uC790\u0020\u003A\u0020" + this.curToken.text)
         }
     }
 
@@ -242,7 +255,8 @@
             }
             while (!this.checkToken(TokenType.RB)) {
                 if (!this.checkToken(TokenType.COMMA)) {
-                    this.error(") 대신 다른 이상한 문자 : " + this.curToken.text)
+                    // this.error(")나 , 대신 다른 이상한 문자 : " + this.curToken.text)
+                    this.error("\u0029\uB098\u0020\u002C\u0020\uB300\uC2E0\u0020\uB2E4\uB978\u0020\uC774\uC0C1\uD55C\u0020\uBB38\uC790\u0020\u003A\u0020" + this.curToken.text)
                 }
                 this.nextToken()
                 this.generator.add(",")
@@ -350,7 +364,8 @@
                     }
                 } else {
                     // this.error("Unexpected token at " + this.curToken.text)
-                    this.error(". 뒤에 이상한 문자 : " + this.curToken.text)  // 이런 경우가 있나?
+                    // this.error(". 뒤에 이상한 문자 : " + this.curToken.text)  // 이런 경우가 있나?
+                    this.error("\u002E\u0020\uB4A4\uC5D0\u0020\uC774\uC0C1\uD55C\u0020\uBB38\uC790\u0020\u003A\u0020" + this.curToken.text)
                 }
             }
         }
@@ -384,7 +399,8 @@
         } else if (this.checkToken(TokenType.IDENT)) {
             if (!this.variables.has(this.curToken.text)) {
                 // this.error("Referencing variable before assignment: " + this.curToken.text)
-                this.error("선언하지 않은 변수를 사용함 : " + this.curToken.text, this.curToken.text)
+                // this.error("선언하지 않은 변수를 사용함 : " + this.curToken.text, this.curToken.text)
+                this.error("\uC120\uC5B8\uD558\uC9C0\u0020\uC54A\uC740\u0020\uBCC0\uC218\uB97C\u0020\uC0AC\uC6A9\uD568\u0020\u003A\u0020" + this.curToken.text, this.curToken.text)
             }
             if (this.checkPeek(TokenType.LB)) {
                 this.functionCall()
@@ -394,7 +410,8 @@
             }
         } else {
             // this.error("Unexpected token at " + this.curToken.text)
-            this.error("이상한 문자 : " + this.curToken.text)
+            // this.error("이상한 문자 : " + this.curToken.text)
+            this.error("\uC774\uC0C1\uD55C\u0020\uBB38\uC790\u0020\u003A\u0020" + this.curToken.text)
         }
     }
 

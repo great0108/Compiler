@@ -14,6 +14,17 @@
         return code
     }
 
+    function toUnicode(str) {
+        let result = "";
+        for (let ch of str) {
+            let codePoint = ch.codePointAt(0);
+            let hex = codePoint.toString(16).toUpperCase();
+            result += '\\u' + hex.padStart(4, '0')
+        }
+        return result
+    }
+
+    console.log(toUnicode("이상한 문자 : "))
 
     let source = `a = 3
 만약 a < 1 
@@ -44,7 +55,9 @@ a
     PRINT 날짜.월
     PRINT 정수인가("3") 그리고 숫자인가("-0.4")
     `
-    let code = compile(source2, "node", "kor")
-    console.log(code)
-    eval(code)
+
+    // compileModules.File.dataPath = "."
+    // let code = compile(source2, "node", "kor")
+    // console.log(code)
+    // eval(code)
 })()
